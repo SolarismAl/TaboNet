@@ -41,7 +41,7 @@ trait HasTeams
             Membership::class,
             'user_id',
             'id',
-            'id',
+            'user_id',
             'team_id',
         )->where('team_members.role', TeamRole::Owner->value);
     }

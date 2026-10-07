@@ -22,11 +22,43 @@ class DashboardTest extends TestCase
     public function test_authenticated_users_can_visit_the_dashboard(): void
     {
         $user = User::factory()->create();
-        $team = $user->currentTeam;
 
         $response = $this
             ->actingAs($user)
             ->get(route('dashboard'));
+
+        $response->assertOk();
+    }
+
+    public function test_authenticated_users_can_visit_price_index(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('price-index'));
+
+        $response->assertOk();
+    }
+
+    public function test_authenticated_users_can_visit_harvest_registry(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('harvest-registry'));
+
+        $response->assertOk();
+    }
+
+    public function test_authenticated_users_can_visit_trade_inquiries(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->get(route('trade-inquiries'));
 
         $response->assertOk();
     }

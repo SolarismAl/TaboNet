@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -13,23 +13,51 @@
             <livewire:team-switcher />
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
+                <flux:sidebar.group :heading="__('Marketplace Operations')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        @if(auth()->user()->isAdmin())
+                            {{ __('Executive Dashboard') }}
+                        @elseif(auth()->user()->isFarmer())
+                            {{ __('Producer Hub') }}
+                        @else
+                            {{ __('Buyer Marketplace') }}
+                        @endif
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="chart-bar" :href="route('price-index')" :current="request()->routeIs('price-index')" wire:navigate>
+                        {{ __('Spot Price Index') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="shopping-bag" :href="route('harvest-registry')" :current="request()->routeIs('harvest-registry')" wire:navigate>
+                        {{ __('Harvest Registry') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="chat-bubble-left-right" :href="route('trade-inquiries')" :current="request()->routeIs('trade-inquiries')" wire:navigate>
+                        {{ __('Trade Inquiries') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                @if(auth()->user()->isAdmin())
+                    <flux:sidebar.group :heading="__('Municipal Administration')" class="grid mt-2">
+                        <flux:sidebar.item icon="shield-check" :href="route('trade-inquiries')" :current="request()->routeIs('trade-inquiries')" wire:navigate>
+                            {{ __('Accreditation & Audit') }}
+                        </flux:sidebar.item>
+                    </flux:sidebar.group>
+                @endif
             </flux:sidebar.nav>
 
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
+                <flux:sidebar.group :heading="__('External Resources')" class="grid">
+                    <flux:sidebar.item icon="globe-alt" :href="route('home')">
+                        {{ __('Public Municipal Portal') }}
+                    </flux:sidebar.item>
 
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
+                    <flux:sidebar.item icon="building-library" href="https://www.nemsu.edu.ph" target="_blank">
+                        {{ __('NEMSU Portal') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />

@@ -24,6 +24,23 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureAuthorization();
+    }
+
+    /**
+     * Configure Role-Based Access Control (RBAC) gates and policies.
+     */
+    protected function configureAuthorization(): void
+    {
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Listing::class, \App\Policies\ProductPolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Product::class, \App\Policies\ProductPolicy::class);
+        \Illuminate\Support\Facades\Gate::policy(\App\Models\Inquiry::class, \App\Policies\InquiryPolicy::class);
+
+        \Illuminate\Support\Facades\Gate::define('admin', fn (\App\Models\User $user) => $user->isAdmin());
+        \Illuminate\Support\Facades\Gate::define('farmer', fn (\App\Models\User $user) => $user->isFarmer());
+        \Illuminate\Support\Facades\Gate::define('buyer', fn (\App\Models\User $user) => $user->isBuyer());
+        \Illuminate\Support\Facades\Gate::define('publish-harvest', fn (\App\Models\User $user) => ($user->isFarmer() || $user->isAdmin()) && ! $user->isSuspended());
+        \Illuminate\Support\Facades\Gate::define('moderate-system', fn (\App\Models\User $user) => $user->isAdmin());
     }
 
     /**

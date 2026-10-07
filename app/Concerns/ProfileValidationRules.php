@@ -18,6 +18,10 @@ trait ProfileValidationRules
         return [
             'name' => $this->nameRules(),
             'email' => $this->emailRules($userId),
+            'role' => ['sometimes', 'string', Rule::in(['farmer', 'buyer', 'admin'])],
+            'phone_number' => ['nullable', 'string', 'max:20'],
+            'barangay' => ['nullable', 'string', 'max:100'],
+            'rsbsa_number' => ['nullable', 'string', 'max:50'],
         ];
     }
 
@@ -45,7 +49,7 @@ trait ProfileValidationRules
             'max:255',
             $userId === null
                 ? Rule::unique(User::class)
-                : Rule::unique(User::class)->ignore($userId),
+                : Rule::unique(User::class)->ignore($userId, 'user_id'),
         ];
     }
 }

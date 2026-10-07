@@ -27,10 +27,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'full_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password_hash' => static::$password ??= Hash::make('password'),
+            'role' => 'buyer',
+            'phone_number' => '09' . fake()->numerify('#########'),
+            'verification_status' => 'pending',
             'remember_token' => Str::random(10),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
@@ -44,8 +47,24 @@ class UserFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function ($user) {
+            if ($user->role === 'farmer' && ! $user->farmerProfile) {
+                $user->farmerProfile()->create([
+                    'farm_name' => ($user->full_name ?: $user->name) . "'s Farm",
+                    'farm_location' => $user->temp_barangay ?: 'Linotan',
+                    'farm_type' => 'Crops',
+                    'valid_id_url' => $user->temp_rsbsa ?: '16-68-04-001-000123',
+                    'bio' => 'Cantilan registered smallholder farmer.',
+                ]);
+            } elseif ($user->role === 'buyer' && ! $user->buyerProfile) {
+                $user->buyerProfile()->create([
+                    'business_name' => ($user->full_name ?: $user->name) . ' Trade',
+                    'delivery_address' => $user->temp_barangay ?: 'Poblacion',
+                    'buyer_type' => 'Wholesaler',
+                ]);
+            }
+
             $team = Team::factory()->personal()->create([
-                'name' => $user->name."'s Team",
+                'name' => ($user->full_name ?: $user->name) . "'s Team",
             ]);
 
             $team->members()->attach($user, [
