@@ -11,6 +11,7 @@ class PriceRecord extends Model
     use HasFactory;
 
     protected $table = 'price_records';
+
     protected $primaryKey = 'price_record_id';
 
     protected $fillable = [

@@ -13,6 +13,7 @@ class Inquiry extends Model
     use HasFactory;
 
     protected $table = 'inquiries';
+
     protected $primaryKey = 'inquiry_id';
 
     protected $fillable = [
@@ -87,6 +88,7 @@ class Inquiry extends Model
         if (preg_match('/(\d+(?:\.\d+)?)\s*(?:kg|kaing|sako|bunch|units?)/i', $this->message, $matches)) {
             return (float) $matches[1];
         }
+
         return $this->listing?->available_quantity ?? 10;
     }
 

@@ -11,6 +11,7 @@ class FarmerProfile extends Model
     use HasFactory;
 
     protected $table = 'farmer_profiles';
+
     protected $primaryKey = 'profile_id';
 
     protected $fillable = [

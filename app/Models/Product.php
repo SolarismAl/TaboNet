@@ -24,10 +24,10 @@ class Product extends Listing
      */
     public static function create(array $attributes = [])
     {
-        if (!isset($attributes['commodity_id']) && isset($attributes['name'])) {
+        if (! isset($attributes['commodity_id']) && isset($attributes['name'])) {
             $catName = $attributes['category'] ?? 'Grains & Cereals';
             $category = Category::firstOrCreate(['name' => $catName], [
-                'description' => $catName . ' agricultural category',
+                'description' => $catName.' agricultural category',
             ]);
 
             $unit = $attributes['unit'] ?? 'kg';
@@ -43,15 +43,15 @@ class Product extends Listing
             $attributes['title'] = $attributes['name'];
         }
 
-        if (isset($attributes['user_id']) && !isset($attributes['farmer_id'])) {
+        if (isset($attributes['user_id']) && ! isset($attributes['farmer_id'])) {
             $attributes['farmer_id'] = $attributes['user_id'];
         }
 
-        if (isset($attributes['price']) && !isset($attributes['price_per_unit'])) {
+        if (isset($attributes['price']) && ! isset($attributes['price_per_unit'])) {
             $attributes['price_per_unit'] = $attributes['price'];
         }
 
-        if (isset($attributes['quantity']) && !isset($attributes['available_quantity'])) {
+        if (isset($attributes['quantity']) && ! isset($attributes['available_quantity'])) {
             $attributes['available_quantity'] = $attributes['quantity'];
         }
 

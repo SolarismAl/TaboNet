@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Passkeys\Passkeys;
 
 /**
  * @property int $user_id
@@ -48,6 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     use HasFactory, HasTeams, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
     protected $table = 'users';
+
     protected $primaryKey = 'user_id';
 
     public const BARANGAYS = [
@@ -152,6 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         if ($status === 'pending' && ($this->role ?? '') === 'farmer') {
             return 'pending_verification';
         }
+
         return $status;
     }
 
@@ -165,6 +168,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     }
 
     public ?string $temp_barangay = null;
+
     public ?string $temp_rsbsa = null;
 
     public function getBarangayAttribute(): ?string
@@ -270,6 +274,6 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 
     public function passkeys(): HasMany
     {
-        return $this->hasMany(\Laravel\Passkeys\Passkeys::passkeyModel(), 'user_id', 'user_id');
+        return $this->hasMany(Passkeys::passkeyModel(), 'user_id', 'user_id');
     }
 }

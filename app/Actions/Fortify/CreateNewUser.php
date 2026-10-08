@@ -45,7 +45,7 @@ class CreateNewUser implements CreatesNewUsers
 
             if ($role === 'farmer') {
                 $user->farmerProfile()->create([
-                    'farm_name' => $user->full_name . ' Farm Produce',
+                    'farm_name' => $user->full_name.' Farm Produce',
                     'farm_location' => $input['barangay'] ?? 'Linotan',
                     'farm_type' => 'Crops',
                     'valid_id_url' => $input['rsbsa_number'] ?? null,
@@ -53,7 +53,7 @@ class CreateNewUser implements CreatesNewUsers
                 ]);
             } else {
                 $user->buyerProfile()->create([
-                    'business_name' => $user->full_name . ' Trade',
+                    'business_name' => $user->full_name.' Trade',
                     'delivery_address' => $input['barangay'] ?? 'Poblacion',
                     'buyer_type' => 'Individual Consumer',
                 ]);

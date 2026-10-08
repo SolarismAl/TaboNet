@@ -11,6 +11,7 @@ class ListingImage extends Model
     use HasFactory;
 
     protected $table = 'listing_images';
+
     protected $primaryKey = 'image_id';
 
     protected $fillable = [

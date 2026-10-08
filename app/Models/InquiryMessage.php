@@ -11,6 +11,7 @@ class InquiryMessage extends Model
     use HasFactory;
 
     protected $table = 'inquiry_messages';
+
     protected $primaryKey = 'message_id';
 
     protected $fillable = [

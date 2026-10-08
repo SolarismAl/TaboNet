@@ -13,6 +13,7 @@ class Commodity extends Model
     use HasFactory;
 
     protected $table = 'commodities';
+
     protected $primaryKey = 'commodity_id';
 
     protected $fillable = [

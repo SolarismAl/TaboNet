@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password_hash' => static::$password ??= Hash::make('password'),
             'role' => 'buyer',
-            'phone_number' => '09' . fake()->numerify('#########'),
+            'phone_number' => '09'.fake()->numerify('#########'),
             'verification_status' => 'pending',
             'remember_token' => Str::random(10),
             'two_factor_secret' => null,
@@ -49,7 +49,7 @@ class UserFactory extends Factory
         return $this->afterCreating(function ($user) {
             if ($user->role === 'farmer' && ! $user->farmerProfile) {
                 $user->farmerProfile()->create([
-                    'farm_name' => ($user->full_name ?: $user->name) . "'s Farm",
+                    'farm_name' => ($user->full_name ?: $user->name)."'s Farm",
                     'farm_location' => $user->temp_barangay ?: 'Linotan',
                     'farm_type' => 'Crops',
                     'valid_id_url' => $user->temp_rsbsa ?: '16-68-04-001-000123',
@@ -57,14 +57,14 @@ class UserFactory extends Factory
                 ]);
             } elseif ($user->role === 'buyer' && ! $user->buyerProfile) {
                 $user->buyerProfile()->create([
-                    'business_name' => ($user->full_name ?: $user->name) . ' Trade',
+                    'business_name' => ($user->full_name ?: $user->name).' Trade',
                     'delivery_address' => $user->temp_barangay ?: 'Poblacion',
                     'buyer_type' => 'Wholesaler',
                 ]);
             }
 
             $team = Team::factory()->personal()->create([
-                'name' => ($user->full_name ?: $user->name) . "'s Team",
+                'name' => ($user->full_name ?: $user->name)."'s Team",
             ]);
 
             $team->members()->attach($user, [

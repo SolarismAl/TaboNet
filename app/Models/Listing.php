@@ -13,6 +13,7 @@ class Listing extends Model
     use HasFactory;
 
     protected $table = 'listings';
+
     protected $primaryKey = 'listing_id';
 
     protected $fillable = [

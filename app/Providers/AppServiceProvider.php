@@ -2,9 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Inquiry;
+use App\Models\Listing;
+use App\Models\Product;
+use App\Models\User;
+use App\Policies\InquiryPolicy;
+use App\Policies\ProductPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -32,15 +39,15 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureAuthorization(): void
     {
-        \Illuminate\Support\Facades\Gate::policy(\App\Models\Listing::class, \App\Policies\ProductPolicy::class);
-        \Illuminate\Support\Facades\Gate::policy(\App\Models\Product::class, \App\Policies\ProductPolicy::class);
-        \Illuminate\Support\Facades\Gate::policy(\App\Models\Inquiry::class, \App\Policies\InquiryPolicy::class);
+        Gate::policy(Listing::class, ProductPolicy::class);
+        Gate::policy(Product::class, ProductPolicy::class);
+        Gate::policy(Inquiry::class, InquiryPolicy::class);
 
-        \Illuminate\Support\Facades\Gate::define('admin', fn (\App\Models\User $user) => $user->isAdmin());
-        \Illuminate\Support\Facades\Gate::define('farmer', fn (\App\Models\User $user) => $user->isFarmer());
-        \Illuminate\Support\Facades\Gate::define('buyer', fn (\App\Models\User $user) => $user->isBuyer());
-        \Illuminate\Support\Facades\Gate::define('publish-harvest', fn (\App\Models\User $user) => ($user->isFarmer() || $user->isAdmin()) && ! $user->isSuspended());
-        \Illuminate\Support\Facades\Gate::define('moderate-system', fn (\App\Models\User $user) => $user->isAdmin());
+        Gate::define('admin', fn (User $user) => $user->isAdmin());
+        Gate::define('farmer', fn (User $user) => $user->isFarmer());
+        Gate::define('buyer', fn (User $user) => $user->isBuyer());
+        Gate::define('publish-harvest', fn (User $user) => ($user->isFarmer() || $user->isAdmin()) && ! $user->isSuspended());
+        Gate::define('moderate-system', fn (User $user) => $user->isAdmin());
     }
 
     /**

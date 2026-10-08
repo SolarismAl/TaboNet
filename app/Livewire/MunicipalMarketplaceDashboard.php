@@ -9,7 +9,6 @@ use App\Models\Inquiry;
 use App\Models\InquiryMessage;
 use App\Models\Listing;
 use App\Models\Notification;
-use App\Models\PriceRecord;
 use App\Models\Product;
 use App\Models\User;
 use Flux\Flux;
@@ -25,12 +24,15 @@ use Livewire\WithPagination;
 class MunicipalMarketplaceDashboard extends Component
 {
     use WithPagination;
+
     // View mode: 'overview', 'price_index', 'harvest_registry', 'trade_inquiries'
     public string $viewMode = 'overview';
 
     // Search & Filter state for Harvest Registry
     public string $search = '';
+
     public string $categoryFilter = 'All';
+
     public string $barangayFilter = 'All';
 
     // Filter for Price Index
@@ -38,30 +40,49 @@ class MunicipalMarketplaceDashboard extends Component
 
     // Add Product/Listing Modal state (UC-03)
     public bool $showAddProductModal = false;
+
     public string $new_name = '';
+
     public string $new_category = 'Grains & Cereals';
+
     public ?float $new_quantity = null;
+
     public string $new_unit = 'kg';
+
     public ?float $new_price = null;
+
     public string $new_barangay = 'Linotan';
+
     public ?string $new_harvest_date = null;
+
     public string $new_pickup_location = '';
+
     public string $new_description = '';
 
     // Pre-order Inquiry Modal state (UC-05)
     public bool $showInquiryModal = false;
+
     public ?int $selectedProductId = null;
+
     public ?float $inquiry_quantity = 10;
+
     public ?string $inquiry_pickup_date = null;
+
     public string $inquiry_message = '';
 
     // Edit Product/Listing Modal state
     public bool $showEditProductModal = false;
+
     public ?int $editingListingId = null;
+
     public string $edit_title = '';
+
     public ?float $edit_price_per_unit = null;
+
     public ?float $edit_available_quantity = null;
+
     public string $edit_status = 'active';
+
     public string $edit_description = '';
 
     public function mount(?string $viewMode = null): void
@@ -138,8 +159,8 @@ class MunicipalMarketplaceDashboard extends Component
                     $fq->where('farm_location', $this->barangayFilter);
                 });
             })
-            ->when(!empty(trim($this->search)), function ($query) {
-                $term = '%' . trim($this->search) . '%';
+            ->when(! empty(trim($this->search)), function ($query) {
+                $term = '%'.trim($this->search).'%';
                 $query->where(function ($sub) use ($term) {
                     $sub->where('title', 'like', $term)
                         ->orWhere('description', 'like', $term)
@@ -275,7 +296,7 @@ class MunicipalMarketplaceDashboard extends Component
     public function userInquiries()
     {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return collect();
         }
 
@@ -322,7 +343,7 @@ class MunicipalMarketplaceDashboard extends Component
     #[Computed]
     public function pendingProducers()
     {
-        if (!Auth::user()?->isAdmin()) {
+        if (! Auth::user()?->isAdmin()) {
             return collect();
         }
 
@@ -368,7 +389,7 @@ class MunicipalMarketplaceDashboard extends Component
 
         $category = Category::firstOrCreate(
             ['name' => $validated['new_category']],
-            ['description' => $validated['new_category'] . ' category']
+            ['description' => $validated['new_category'].' category']
         );
 
         $commodity = Commodity::firstOrCreate(
@@ -432,7 +453,7 @@ class MunicipalMarketplaceDashboard extends Component
 
         $validated = $this->validate([
             'selectedProductId' => ['required', 'exists:listings,listing_id'],
-            'inquiry_quantity' => ['required', 'numeric', 'min:0.1', 'max:' . (float) $listing->available_quantity],
+            'inquiry_quantity' => ['required', 'numeric', 'min:0.1', 'max:'.(float) $listing->available_quantity],
             'inquiry_pickup_date' => ['required', 'date'],
             'inquiry_message' => ['nullable', 'string', 'max:1000'],
         ]);
@@ -457,7 +478,7 @@ class MunicipalMarketplaceDashboard extends Component
             'user_id' => $listing->farmer_id,
             'inquiry_id' => $inquiry->inquiry_id,
             'title' => 'New Trade Lead',
-            'message' => (Auth::user()->full_name ?: Auth::user()->name) . " placed a pre-order on {$listing->title}.",
+            'message' => (Auth::user()->full_name ?: Auth::user()->name)." placed a pre-order on {$listing->title}.",
             'is_read' => false,
         ]);
 

@@ -11,6 +11,7 @@ class BuyerProfile extends Model
     use HasFactory;
 
     protected $table = 'buyer_profiles';
+
     protected $primaryKey = 'profile_id';
 
     protected $fillable = [

@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Livewire\MunicipalMarketplaceDashboard;
-use App\Models\Category;
-use App\Models\Commodity;
 use App\Models\Inquiry;
 use App\Models\Listing;
 use App\Models\PriceRecord;

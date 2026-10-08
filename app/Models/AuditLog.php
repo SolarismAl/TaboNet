@@ -11,6 +11,7 @@ class AuditLog extends Model
     use HasFactory;
 
     protected $table = 'audit_logs';
+
     protected $primaryKey = 'log_id';
 
     protected $fillable = [

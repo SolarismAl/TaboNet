@@ -11,6 +11,7 @@ class ModerationReview extends Model
     use HasFactory;
 
     protected $table = 'moderation_reviews';
+
     protected $primaryKey = 'review_id';
 
     protected $fillable = [
