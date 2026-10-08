@@ -41,6 +41,7 @@ class CreateNewUser implements CreatesNewUsers
                 'role' => $role,
                 'phone_number' => $input['phone_number'] ?? null,
                 'verification_status' => $role === 'farmer' ? 'pending' : 'verified',
+                'email_verified_at' => now(),
             ]);
 
             if ($role === 'farmer') {
