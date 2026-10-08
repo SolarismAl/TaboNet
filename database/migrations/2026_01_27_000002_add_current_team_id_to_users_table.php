@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $afterCol = Schema::hasColumn('users', 'password_hash') ? 'password_hash' : 'password';
             $table->foreignId('current_team_id')
                 ->nullable()
-                ->after('password')
+                ->after($afterCol)
                 ->constrained('teams')
                 ->nullOnDelete();
         });
