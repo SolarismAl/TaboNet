@@ -97,6 +97,7 @@ class MunicipalMarketplaceDashboard extends Component
         }
         $this->new_harvest_date = now()->format('Y-m-d');
         $this->inquiry_pickup_date = now()->addDays(2)->format('Y-m-d');
+        $this->clearDashboardCache();
     }
 
     public function updatedSearch(): void
@@ -177,53 +178,71 @@ class MunicipalMarketplaceDashboard extends Component
     }
 
     /**
+     * Invalidate dashboard transient cache on write operations
+     */
+    public function clearDashboardCache(): void
+    {
+        cache()->forget('tabonet_price_index_summary_All');
+        foreach (Product::CATEGORIES as $cat) {
+            cache()->forget("tabonet_price_index_summary_{$cat}");
+        }
+        if ($userId = Auth::id()) {
+            cache()->forget("tabonet_kpis_user_{$userId}");
+        }
+    }
+
+    /**
      * Compute Municipal Spot Price Index Aggregations (UC-06 / D3 Repository -> PRICE_RECORDS / LISTINGS)
      * Formula: P_avg = Sum(P) / N
      */
     #[Computed]
     public function priceIndexSummary()
     {
-        $records = Listing::query()
-            ->with(['commodity.category', 'farmer.farmerProfile'])
-            ->where('status', 'active')
-            ->when($this->priceCategoryFilter !== 'All', function ($query) {
-                $query->whereHas('commodity.category', function ($cq) {
-                    $cq->where('name', $this->priceCategoryFilter);
-                });
-            })
-            ->get();
+        $cacheKey = "tabonet_price_index_summary_{$this->priceCategoryFilter}";
 
-        if ($records->isEmpty()) {
-            return collect();
-        }
+        return cache()->remember($cacheKey, 20, function () {
+            $records = Listing::query()
+                ->with(['commodity.category', 'farmer.farmerProfile'])
+                ->where('status', 'active')
+                ->when($this->priceCategoryFilter !== 'All', function ($query) {
+                    $query->whereHas('commodity.category', function ($cq) {
+                        $cq->where('name', $this->priceCategoryFilter);
+                    });
+                })
+                ->get();
 
-        return $records->groupBy(fn ($item) => $item->commodity?->name ?? $item->title)->map(function ($items, $name) {
-            $first = $items->first();
-            $prices = $items->pluck('price_per_unit')->map(fn ($p) => (float) $p);
-            $count = $prices->count();
-            $sum = $prices->sum();
-            $avg = $count > 0 ? $sum / $count : 0;
-            $min = $prices->min();
-            $max = $prices->max();
-
-            $trend = 'Spot Stable';
-            if ($min !== $max) {
-                $diffPercent = round((($avg - $min) / $min) * 100, 1);
-                $trend = $diffPercent > 0 ? "+{$diffPercent}% Spread" : 'Spot Equilibrium';
+            if ($records->isEmpty()) {
+                return collect();
             }
 
-            return [
-                'name' => $name,
-                'category' => $first->commodity?->category?->name ?? 'Agricultural',
-                'unit' => $first->commodity?->unit_of_measure ?? 'kg',
-                'p_avg' => round($avg, 2),
-                'p_min' => round($min, 2),
-                'p_max' => round($max, 2),
-                'samples' => $count,
-                'barangays' => $items->map(fn ($it) => $it->farmer?->farmerProfile?->farm_location ?? 'Linotan')->unique()->values()->all(),
-                'trend' => $trend,
-            ];
-        })->values();
+            return $records->groupBy(fn ($item) => $item->commodity?->name ?? $item->title)->map(function ($items, $name) {
+                $first = $items->first();
+                $prices = $items->pluck('price_per_unit')->map(fn ($p) => (float) $p);
+                $count = $prices->count();
+                $sum = $prices->sum();
+                $avg = $count > 0 ? $sum / $count : 0;
+                $min = $prices->min();
+                $max = $prices->max();
+
+                $trend = 'Spot Stable';
+                if ($min !== $max) {
+                    $diffPercent = round((($avg - $min) / $min) * 100, 1);
+                    $trend = $diffPercent > 0 ? "+{$diffPercent}% Spread" : 'Spot Equilibrium';
+                }
+
+                return [
+                    'name' => $name,
+                    'category' => $first->commodity?->category?->name ?? 'Agricultural',
+                    'unit' => $first->commodity?->unit_of_measure ?? 'kg',
+                    'p_avg' => round($avg, 2),
+                    'p_min' => round($min, 2),
+                    'p_max' => round($max, 2),
+                    'samples' => $count,
+                    'barangays' => $items->map(fn ($it) => $it->farmer?->farmerProfile?->farm_location ?? 'Linotan')->unique()->values()->all(),
+                    'trend' => $trend,
+                ];
+            })->values();
+        });
     }
 
     /**
@@ -232,42 +251,47 @@ class MunicipalMarketplaceDashboard extends Component
     #[Computed]
     public function kpis(): array
     {
-        $totalListings = Listing::where('status', 'active')->count();
+        $userId = Auth::id() ?? 0;
+        $cacheKey = "tabonet_kpis_user_{$userId}";
 
-        // Rice average spot market
-        $riceAvg = Listing::where('status', 'active')
-            ->where('title', 'like', '%Rice%')
-            ->avg('price_per_unit');
+        return cache()->remember($cacheKey, 20, function () {
+            $totalListings = Listing::where('status', 'active')->count();
 
-        $user = Auth::user();
-        $inquiriesCount = 0;
-        $myListingsCount = 0;
-        $myInventoryValue = 0.0;
+            // Rice average spot market
+            $riceAvg = Listing::where('status', 'active')
+                ->where('title', 'like', '%Rice%')
+                ->avg('price_per_unit');
 
-        if ($user) {
-            if ($user->isFarmer()) {
-                $inquiriesCount = Inquiry::whereHas('listing', fn ($q) => $q->where('farmer_id', $user->user_id))
-                    ->where('status', 'pending')
-                    ->count();
+            $user = Auth::user();
+            $inquiriesCount = 0;
+            $myListingsCount = 0;
+            $myInventoryValue = 0.0;
 
-                $farmerListings = Listing::where('farmer_id', $user->user_id)->where('status', 'active')->get();
-                $myListingsCount = $farmerListings->count();
-                $myInventoryValue = (float) $farmerListings->sum(fn ($l) => (float) $l->price_per_unit * (float) $l->available_quantity);
-            } else {
-                $inquiriesCount = Inquiry::where('buyer_id', $user->user_id)->count();
+            if ($user) {
+                if ($user->isFarmer()) {
+                    $inquiriesCount = Inquiry::whereHas('listing', fn ($q) => $q->where('farmer_id', $user->user_id))
+                        ->where('status', 'pending')
+                        ->count();
+
+                    $farmerListings = Listing::where('farmer_id', $user->user_id)->where('status', 'active')->get();
+                    $myListingsCount = $farmerListings->count();
+                    $myInventoryValue = (float) $farmerListings->sum(fn ($l) => (float) $l->price_per_unit * (float) $l->available_quantity);
+                } else {
+                    $inquiriesCount = Inquiry::where('buyer_id', $user->user_id)->count();
+                }
             }
-        }
 
-        $producersCount = User::where('role', 'farmer')->count();
+            $producersCount = User::where('role', 'farmer')->count();
 
-        return [
-            'total_listings' => $totalListings,
-            'rice_avg' => $riceAvg ? round($riceAvg, 2) : 52.00,
-            'inquiries_count' => $inquiriesCount,
-            'producers_count' => $producersCount,
-            'my_listings_count' => $myListingsCount,
-            'my_inventory_value' => round($myInventoryValue, 2),
-        ];
+            return [
+                'total_listings' => $totalListings,
+                'rice_avg' => $riceAvg ? round($riceAvg, 2) : 52.00,
+                'inquiries_count' => $inquiriesCount,
+                'producers_count' => $producersCount,
+                'my_listings_count' => $myListingsCount,
+                'my_inventory_value' => round($myInventoryValue, 2),
+            ];
+        });
     }
 
     /**
@@ -418,6 +442,7 @@ class MunicipalMarketplaceDashboard extends Component
             ['title' => $listing->title, 'price' => $listing->price_per_unit]
         );
 
+        $this->clearDashboardCache();
         $this->showAddProductModal = false;
         $this->reset(['new_name', 'new_quantity', 'new_price', 'new_description']);
 
@@ -490,6 +515,7 @@ class MunicipalMarketplaceDashboard extends Component
             ['listing_id' => $listing->listing_id, 'quantity' => $validated['inquiry_quantity']]
         );
 
+        $this->clearDashboardCache();
         $this->showInquiryModal = false;
         $this->selectedProductId = null;
         $this->reset(['inquiry_message']);
@@ -519,6 +545,8 @@ class MunicipalMarketplaceDashboard extends Component
             ['status' => $status]
         );
 
+        $this->clearDashboardCache();
+
         Flux::toast(
             variant: 'success',
             text: "Trade lead status updated to '{$status}'."
@@ -543,6 +571,8 @@ class MunicipalMarketplaceDashboard extends Component
             $farmer->user_id,
             ['full_name' => $farmer->full_name]
         );
+
+        $this->clearDashboardCache();
 
         Flux::toast(
             variant: 'success',
@@ -603,6 +633,7 @@ class MunicipalMarketplaceDashboard extends Component
             ['title' => $listing->title, 'price' => $listing->price_per_unit, 'status' => $listing->status]
         );
 
+        $this->clearDashboardCache();
         $this->showEditProductModal = false;
         $this->editingListingId = null;
 
@@ -638,6 +669,8 @@ class MunicipalMarketplaceDashboard extends Component
             $listing->listing_id,
             ['title' => $listing->title]
         );
+
+        $this->clearDashboardCache();
 
         Flux::toast(
             variant: 'success',
