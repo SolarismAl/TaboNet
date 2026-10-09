@@ -1,15 +1,27 @@
 # ==========================================
-# Stage 1: Build frontend assets with Node
+# Stage 1: Install Composer Dependencies
 # ==========================================
-FROM node:20-alpine AS node-builder
+FROM composer:2 AS composer-builder
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
+COPY . .
+RUN composer dump-autoload --optimize --no-dev
+
+# ==========================================
+# Stage 2: Build frontend assets with Node 22
+# ==========================================
+FROM node:22-alpine AS node-builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+# Copy vendor from Stage 1 so Vite/Tailwind can resolve Livewire Flux CSS
+COPY --from=composer-builder /app/vendor ./vendor
 RUN npm run build
 
 # ==========================================
-# Stage 2: Production PHP 8.3 + Nginx container
+# Stage 3: Production PHP 8.3 + Nginx container
 # ==========================================
 FROM richarvey/nginx-php-fpm:3.1.6
 WORKDIR /var/www/html
@@ -17,7 +29,10 @@ WORKDIR /var/www/html
 # Copy application files
 COPY . .
 
-# Copy compiled Vite assets from Stage 1
+# Copy production vendor from Stage 1
+COPY --from=composer-builder /app/vendor ./vendor
+
+# Copy compiled Vite assets from Stage 2
 COPY --from=node-builder /app/public/build ./public/build
 
 # Image & Web Server configuration
