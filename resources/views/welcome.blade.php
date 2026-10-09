@@ -16,8 +16,8 @@
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-[40rem] bg-gradient-to-b from-emerald-100/30 dark:from-emerald-950/20 via-transparent to-amber-100/20 dark:to-transparent blur-2xl pointer-events-none"></div>
     </div>
 
-    <!-- Official Top Government Notice Bar -->
-    <div class="bg-emerald-900 text-emerald-100 dark:bg-slate-900 border-b border-emerald-800/80 dark:border-slate-800 text-xs py-2 px-4 sm:px-6 lg:px-8">
+    <!-- Official Top Government Notice Bar (Hidden on smaller screens) -->
+    <div class="hidden md:block bg-emerald-900 text-emerald-100 dark:bg-slate-900 border-b border-emerald-800/80 dark:border-slate-800 text-xs py-2 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[11px]">
             <div class="flex items-center gap-2">
                 <span class="inline-block size-2 rounded-full bg-emerald-400 animate-pulse"></span>
