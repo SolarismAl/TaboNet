@@ -1,14 +1,11 @@
 <x-layouts::auth :title="__('User Registration - TaboNet Cantilan')">
     <div class="flex flex-col gap-6" x-data="{ role: '{{ old('role', 'farmer') }}' }">
-        <div class="text-center space-y-1.5 pb-2">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs font-medium text-slate-700 dark:text-slate-300">
-                <svg class="size-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                </svg>
-                <span>Municipal User Accreditation</span>
+        <div class="text-center space-y-2 pb-1">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100/80 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-900 dark:text-emerald-300">
+                <span>🌾 Join TaboNet Marketplace</span>
             </div>
-            <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Create TaboNet Account</h1>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Register as a producer or buyer in the Municipality of Cantilan</p>
+            <h1 class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Create Your Account</h1>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400">Join Cantilan's local agricultural community as a farmer or buyer</p>
         </div>
 
         <!-- Session Status -->
@@ -23,40 +20,36 @@
 
             <!-- Stakeholder Classification -->
             <div class="space-y-2">
-                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                    Account Classification <span class="text-emerald-600 dark:text-emerald-400">*</span>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                    I am registering as <span class="text-emerald-600 dark:text-emerald-400">*</span>
                 </label>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <!-- Farmer / Producer -->
                     <label 
                         @click="role = 'farmer'"
-                        :class="role === 'farmer' ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 ring-1 ring-emerald-500' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                        class="relative flex flex-col p-3.5 rounded-lg border cursor-pointer transition-colors shadow-2xs">
+                        :class="role === 'farmer' ? 'border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/40 ring-2 ring-emerald-500' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:border-emerald-300 dark:hover:border-slate-700'"
+                        class="relative flex flex-col p-4 rounded-xl border cursor-pointer transition-all shadow-2xs">
                         <input type="radio" name="role" value="farmer" x-model="role" class="sr-only" required>
                         <div class="flex items-center gap-2 mb-1">
-                            <svg class="size-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
+                            <span class="text-lg">🌾</span>
                             <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wide">Farmer / Producer</span>
                         </div>
-                        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Publish agricultural listings, track commodity trends, and receive inquiries.</p>
-                        <div x-show="role === 'farmer'" class="absolute top-2.5 right-2.5 size-2 rounded-full bg-emerald-600 dark:bg-emerald-400"></div>
+                        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Post your harvests, receive direct buyer inquiries, and check fair market rates.</p>
+                        <div x-show="role === 'farmer'" class="absolute top-3 right-3 size-2.5 rounded-full bg-emerald-600 dark:bg-emerald-400"></div>
                     </label>
 
                     <!-- Buyer / Merchant -->
                     <label 
                         @click="role = 'buyer'"
-                        :class="role === 'buyer' ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/30 ring-1 ring-emerald-500' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:border-slate-300 dark:hover:border-slate-700'"
-                        class="relative flex flex-col p-3.5 rounded-lg border cursor-pointer transition-colors shadow-2xs">
+                        :class="role === 'buyer' ? 'border-amber-500 bg-amber-50/80 dark:bg-amber-950/40 ring-2 ring-amber-500' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 hover:border-amber-300 dark:hover:border-slate-700'"
+                        class="relative flex flex-col p-4 rounded-xl border cursor-pointer transition-all shadow-2xs">
                         <input type="radio" name="role" value="buyer" x-model="role" class="sr-only" required>
                         <div class="flex items-center gap-2 mb-1">
-                            <svg class="size-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                            </svg>
+                            <span class="text-lg">🛒</span>
                             <span class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wide">Buyer / Consumer</span>
                         </div>
-                        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Procure farm-fresh crops directly from local farmers at prevailing prices.</p>
-                        <div x-show="role === 'buyer'" class="absolute top-2.5 right-2.5 size-2 rounded-full bg-emerald-600 dark:bg-emerald-400"></div>
+                        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">Browse and purchase fresh produce directly from local growers at prevailing rates.</p>
+                        <div x-show="role === 'buyer'" class="absolute top-3 right-3 size-2.5 rounded-full bg-amber-500"></div>
                     </label>
                 </div>
                 @error('role')
@@ -103,7 +96,7 @@
                         required
                         placeholder="0912 345 6789"
                     />
-                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Official trade and SMS inquiry contact</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Used for order updates and SMS notifications</p>
                 </div>
 
                 <!-- Cantilan Barangay -->
@@ -129,16 +122,16 @@
             </div>
 
             <!-- DA-RSBSA Accreditation (Farmer Only) -->
-            <div x-show="role === 'farmer'" x-transition class="p-3.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950/60 space-y-2">
+            <div x-show="role === 'farmer'" x-transition class="p-4 rounded-xl border border-emerald-100 dark:border-emerald-950/60 bg-emerald-50/40 dark:bg-slate-950/60 space-y-2">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                        <svg class="size-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                        </svg>
+                    <label class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                        <span class="text-sm">🛡️</span>
                         <span>DA-RSBSA Registration ID</span>
                         <span class="text-[10px] text-slate-500 dark:text-slate-400 font-normal">(Optional)</span>
                     </label>
-                    <span class="text-[10px] text-emerald-800 dark:text-emerald-400 font-mono bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-800/80 font-medium">Accreditation</span>
+                    <span class="text-[10px] text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                        Verified Badge
+                    </span>
                 </div>
                 <flux:input
                     name="rsbsa_number"
@@ -147,7 +140,7 @@
                     placeholder="e.g., 16-68-04-001-XXXXXX"
                 />
                 <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-normal">
-                    Registry System for Basic Sectors in Agriculture (RSBSA) enables verified producer status under administrative review (UC-07).
+                    If you are registered with the Cantilan Municipal Agriculture Office, enter your RSBSA ID to get an official <strong>Verified Farmer</strong> badge.
                 </p>
             </div>
 
@@ -174,18 +167,18 @@
                 />
             </div>
 
-            <div class="pt-1">
-                <flux:button type="submit" variant="primary" class="w-full !bg-emerald-700 hover:!bg-emerald-600 !text-white font-medium py-2.5 rounded-lg transition-colors shadow-sm" data-test="register-user-button">
+            <div class="pt-2">
+                <flux:button type="submit" variant="primary" class="w-full !bg-emerald-600 hover:!bg-emerald-500 !text-white font-bold py-3 rounded-xl transition-all shadow-md shadow-emerald-600/25" data-test="register-user-button">
                     {{ __('Complete Registration') }}
                 </flux:button>
             </div>
         </form>
 
-        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400">
+        <div class="pt-3 border-t border-emerald-100 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400">
             <span>{{ __('Already registered with TaboNet?') }}</span>
             <flux:link
                 :href="$teamInvitation ? route('login', ['invitation' => $teamInvitation['code']]) : route('login')"
-                class="!text-emerald-700 dark:!text-emerald-400 hover:!text-emerald-600 dark:hover:!text-emerald-300 font-medium ml-1"
+                class="!text-emerald-700 dark:!text-emerald-400 hover:!text-emerald-600 dark:hover:!text-emerald-300 font-bold ml-1"
                 data-test="team-invitation-login-link"
                 wire:navigate
             >

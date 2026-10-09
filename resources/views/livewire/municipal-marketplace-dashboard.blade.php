@@ -4,40 +4,43 @@
     <!-- ================================================================= -->
     @if($viewMode === 'overview')
         <!-- Greeting Header & RBAC Identity -->
-        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 sm:p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 p-5 sm:p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
-                <img src="{{ asset('img/cantilan_logo.png') }}" alt="Cantilan Official Seal" class="h-11 w-11 object-contain shrink-0 drop-shadow-xs">
-                <div class="space-y-0.5">
+                <div class="relative shrink-0">
+                    <img src="{{ asset('img/cantilan_logo.png') }}" alt="Cantilan Official Seal" class="h-12 w-12 object-contain drop-shadow-xs">
+                    <span class="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-600 text-white text-[9px] font-bold shadow-xs">🌾</span>
+                </div>
+                <div class="space-y-1">
                     <div class="flex flex-wrap items-center gap-2">
-                        <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">{{ Auth::user()->name }}</h1>
+                        <h1 class="text-xl font-black tracking-tight text-slate-900 dark:text-white">{{ Auth::user()->name }}</h1>
                         @if(Auth::user()->isFarmer())
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-                                Smallholder Producer
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                🌿 Smallholder Producer
                             </span>
                             @if(Auth::user()->status === 'verified')
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border border-teal-300 dark:border-teal-800">
-                                    DA-RSBSA Verified
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-100 dark:bg-teal-950 text-teal-800 dark:text-teal-300 border border-teal-200 dark:border-teal-800">
+                                    🛡️ DA-RSBSA Verified
                                 </span>
                             @else
-                                <span class="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
-                                    Accreditation Pending
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                                    Pending Verification
                                 </span>
                             @endif
                         @elseif(Auth::user()->isAdmin())
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800">
-                                Municipal Administrator
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                                🏛️ Municipal Administrator
                             </span>
                         @else
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-800">
-                                Commercial Buyer
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                🛒 Commercial Buyer
                             </span>
                         @endif
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400">
                         @if(Auth::user()->isFarmer())
-                            Brgy. {{ Auth::user()->barangay ?? 'Cantilan District' }} • Smallholder Producer Hub
+                            Brgy. {{ Auth::user()->barangay ?? 'Cantilan District' }} • Producer Hub
                         @elseif(Auth::user()->isAdmin())
-                            LGU Cantilan Municipal Hall • Agricultural Oversight & Price Stabilization
+                            LGU Cantilan Municipal Hall • Agricultural Marketplace & Oversight
                         @else
                             Brgy. {{ Auth::user()->barangay ?? 'Cantilan District' }} • Direct Commercial Trade Portal
                         @endif
@@ -46,15 +49,15 @@
             </div>
 
             <!-- Role-Specific Action Controls -->
-            <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
                 @if(Auth::user()->isFarmer() || Auth::user()->isAdmin())
                     @can('publish-harvest')
                         <button
                             wire:click="openAddProductModal"
                             type="button"
-                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider transition-colors shadow-xs cursor-pointer"
+                            class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm shadow-emerald-600/25 hover:shadow-md cursor-pointer"
                         >
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
                             <span>+ Post Harvest Listing</span>
@@ -64,16 +67,16 @@
                     <a
                         href="{{ route('harvest-registry') }}"
                         wire:navigate
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-semibold uppercase tracking-wider transition-colors shadow-xs"
+                        class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm shadow-emerald-600/25 hover:shadow-md"
                     >
-                        <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                         </svg>
                         <span>Browse Harvest Registry</span>
                     </a>
                 @endif
 
-                <a href="{{ route('home') }}" class="px-3.5 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 text-xs font-semibold uppercase tracking-wider transition-colors">
+                <a href="{{ route('home') }}" class="px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold uppercase tracking-wider transition-colors shadow-2xs">
                     Public Portal
                 </a>
             </div>
@@ -83,11 +86,11 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             @if(Auth::user()->isFarmer())
                 <!-- Farmer KPI 1: My Active Batches -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">My Active Produce</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">My Active Produce</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
                         </span>
@@ -97,11 +100,11 @@
                 </div>
 
                 <!-- Farmer KPI 2: Incoming Buyer Pre-Orders -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Incoming Pre-Orders</span>
-                        <span class="p-1 rounded bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Incoming Pre-Orders</span>
+                        <span class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
                         </span>
@@ -111,11 +114,11 @@
                 </div>
 
                 <!-- Farmer KPI 3: Estimated Stock Valuation -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">My Stock Valuation</span>
-                        <span class="p-1 rounded bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">My Stock Valuation</span>
+                        <span class="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </span>
@@ -125,25 +128,25 @@
                 </div>
 
                 <!-- Farmer KPI 4: Prevailing Rice Spot Rate -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Rice Mean (P_avg)</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Prevailing Rice Price</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
                         </span>
                     </div>
                     <div class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400">₱{{ number_format($this->kpis['rice_avg'], 2) }} / kg</div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Cantilan market benchmark</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Cantilan market average</div>
                 </div>
             @elseif(Auth::user()->isAdmin())
                 <!-- Admin Municipal Oversight KPIs -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Harvest Listings</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Harvest Listings</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
                         </span>
@@ -152,24 +155,24 @@
                     <div class="text-[11px] text-slate-500 dark:text-slate-400">Across Cantilan</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Rice Mean (P_avg)</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Prevailing Rice Price</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
                         </span>
                     </div>
                     <div class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400">₱{{ number_format($this->kpis['rice_avg'], 2) }} / kg</div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Spot Benchmark</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Cantilan market average</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Producers</span>
-                        <span class="p-1 rounded bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Producers</span>
+                        <span class="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </span>
@@ -178,11 +181,11 @@
                     <div class="text-[11px] text-slate-500 dark:text-slate-400">Smallholders</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Trade Inquiries</span>
-                        <span class="p-1 rounded bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Trade Inquiries</span>
+                        <span class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
                         </span>
@@ -192,11 +195,11 @@
                 </div>
             @else
                 <!-- Buyer KPIs -->
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">My Pre-Orders</span>
-                        <span class="p-1 rounded bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">My Pre-Orders</span>
+                        <span class="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                             </svg>
                         </span>
@@ -205,11 +208,11 @@
                     <div class="text-[11px] text-slate-500 dark:text-slate-400">Active inquiries placed</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Available Batches</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Available Batches</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
                         </span>
@@ -218,24 +221,24 @@
                     <div class="text-[11px] text-slate-500 dark:text-slate-400">Ready for purchase</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Rice Mean (P_avg)</span>
-                        <span class="p-1 rounded bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Prevailing Rice Price</span>
+                        <span class="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
                         </span>
                     </div>
                     <div class="text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400">₱{{ number_format($this->kpis['rice_avg'], 2) }} / kg</div>
-                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Benchmark rate</div>
+                    <div class="text-[11px] text-slate-500 dark:text-slate-400">Cantilan market average</div>
                 </div>
 
-                <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 space-y-1 shadow-xs">
+                <div class="p-5 rounded-2xl border border-emerald-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/90 space-y-1.5 shadow-sm">
                     <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                        <span class="font-semibold uppercase tracking-wider text-[10px]">Local Producers</span>
-                        <span class="p-1 rounded bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
-                            <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <span class="font-bold uppercase tracking-wider text-[10px]">Local Producers</span>
+                        <span class="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/70 text-teal-600 dark:text-teal-400">
+                            <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                             </svg>
                         </span>
