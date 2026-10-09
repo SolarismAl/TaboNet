@@ -1,21 +1,5 @@
 <x-layouts::auth :title="__('Sign In - TaboNet Cantilan')">
-    <div 
-        class="flex flex-col gap-5"
-        x-data="{
-            fillCredentials(email, password) {
-                const emailInput = document.querySelector('input[name=email]');
-                const passInput = document.querySelector('input[name=password]');
-                if (emailInput) { 
-                    emailInput.value = email; 
-                    emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-                if (passInput) { 
-                    passInput.value = password; 
-                    passInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            }
-        }"
-    >
+    <div class="flex flex-col gap-5">
         <div class="text-center space-y-1.5 pb-1">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs font-medium text-slate-700 dark:text-slate-300">
                 <svg class="size-3.5 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,40 +68,6 @@
                 </flux:button>
             </div>
         </form>
-
-        <!-- Quick Demo Accounts (Convenient for Local Defense / Testing) -->
-        <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 p-3 space-y-2">
-            <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                <span class="font-semibold uppercase tracking-wider text-[10px]">Pre-configured Accounts</span>
-                <span>Password: <code class="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono">password</code></span>
-            </div>
-            <div class="grid grid-cols-3 gap-2 text-xs">
-                <button 
-                    type="button" 
-                    @click="fillCredentials('admin@tabonet.ph', 'password')"
-                    class="px-2 py-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-purple-500 text-slate-700 dark:text-slate-200 text-center font-medium transition-colors shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700"
-                >
-                    <span class="block text-[10px] uppercase text-purple-600 dark:text-purple-400 font-bold">Admin</span>
-                    <span class="text-[11px] truncate block">admin@tabonet.ph</span>
-                </button>
-                <button 
-                    type="button" 
-                    @click="fillCredentials('farmer@tabonet.ph', 'password')"
-                    class="px-2 py-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-500 text-slate-700 dark:text-slate-200 text-center font-medium transition-colors shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700"
-                >
-                    <span class="block text-[10px] uppercase text-emerald-600 dark:text-emerald-400 font-bold">Farmer</span>
-                    <span class="text-[11px] truncate block">farmer@tabonet.ph</span>
-                </button>
-                <button 
-                    type="button" 
-                    @click="fillCredentials('buyer@tabonet.ph', 'password')"
-                    class="px-2 py-1.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-blue-500 text-slate-700 dark:text-slate-200 text-center font-medium transition-colors shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700"
-                >
-                    <span class="block text-[10px] uppercase text-blue-600 dark:text-blue-400 font-bold">Buyer</span>
-                    <span class="text-[11px] truncate block">buyer@tabonet.ph</span>
-                </button>
-            </div>
-        </div>
 
         <div class="pt-2 border-t border-slate-200 dark:border-slate-800 text-center text-xs text-slate-600 dark:text-slate-400">
             <span>{{ __("Do not have an account yet?") }}</span>
