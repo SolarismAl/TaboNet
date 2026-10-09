@@ -15,6 +15,7 @@ use Flux\Flux;
 use Illuminate\Contracts\View\View;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Computed;
@@ -129,6 +130,10 @@ class MunicipalMarketplaceDashboard extends Component
      */
     protected function paginateCollection($items, int $perPage = 10, string $pageName = 'page'): LengthAwarePaginator
     {
+        if (! $items instanceof Collection) {
+            $items = is_array($items) ? collect($items) : collect();
+        }
+
         $page = Paginator::resolveCurrentPage($pageName);
         $sliced = $items->forPage($page, $perPage)->values();
 
@@ -196,11 +201,11 @@ class MunicipalMarketplaceDashboard extends Component
      * Formula: P_avg = Sum(P) / N
      */
     #[Computed]
-    public function priceIndexSummary()
+    public function priceIndexSummary(): Collection
     {
         $cacheKey = "tabonet_price_index_summary_{$this->priceCategoryFilter}";
 
-        return cache()->remember($cacheKey, 20, function () {
+        $cached = cache()->remember($cacheKey, 20, function () {
             $records = Listing::query()
                 ->with(['commodity.category', 'farmer.farmerProfile'])
                 ->where('status', 'active')
@@ -212,7 +217,7 @@ class MunicipalMarketplaceDashboard extends Component
                 ->get();
 
             if ($records->isEmpty()) {
-                return collect();
+                return [];
             }
 
             return $records->groupBy(fn ($item) => $item->commodity?->name ?? $item->title)->map(function ($items, $name) {
@@ -241,8 +246,15 @@ class MunicipalMarketplaceDashboard extends Component
                     'barangays' => $items->map(fn ($it) => $it->farmer?->farmerProfile?->farm_location ?? 'Linotan')->unique()->values()->all(),
                     'trend' => $trend,
                 ];
-            })->values();
+            })->values()->all();
         });
+
+        if (! is_array($cached)) {
+            cache()->forget($cacheKey);
+            $cached = [];
+        }
+
+        return collect($cached);
     }
 
     /**
