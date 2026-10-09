@@ -2,7 +2,8 @@
     x-data="{
         showAddModal: @entangle('showAddProductModal').live,
         showEditModal: @entangle('showEditProductModal').live,
-        showInquiryModal: @entangle('showInquiryModal').live
+        showInquiryModal: @entangle('showInquiryModal').live,
+        showRemoveModal: @entangle('showRemoveModal').live
     }"
     class="flex flex-col gap-6 w-full"
 >
@@ -509,18 +510,17 @@
                                                 <span>Edit</span>
                                             </button>
                                             <button
-                                                wire:click="removeListing({{ $item->id }})"
-                                                wire:confirm="Are you sure you want to remove this harvest listing?"
+                                                wire:click="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                 wire:loading.attr="disabled"
-                                                wire:target="removeListing({{ $item->id }})"
+                                                wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                 type="button"
                                                 class="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-[11px] font-semibold transition-all cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
                                                 title="Remove Listing"
                                             >
-                                                <svg wire:loading.remove wire:target="removeListing({{ $item->id }})" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg wire:loading.remove wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
-                                                <svg wire:loading wire:target="removeListing({{ $item->id }})" class="animate-spin size-3 text-red-600" viewBox="0 0 24 24" fill="none">
+                                                <svg wire:loading wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="animate-spin size-3 text-red-600" viewBox="0 0 24 24" fill="none">
                                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                                 </svg>
@@ -711,18 +711,17 @@
                                                 <span>Edit</span>
                                             </button>
                                             <button
-                                                wire:click="removeListing({{ $item->id }})"
-                                                wire:confirm="Are you sure you want to remove this harvest listing?"
+                                                wire:click="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                 wire:loading.attr="disabled"
-                                                wire:target="removeListing({{ $item->id }})"
+                                                wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                 type="button"
                                                 class="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-[11px] font-semibold transition-all cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
                                                 title="Remove Listing"
                                             >
-                                                <svg wire:loading.remove wire:target="removeListing({{ $item->id }})" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <svg wire:loading.remove wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
-                                                <svg wire:loading wire:target="removeListing({{ $item->id }})" class="animate-spin size-3 text-red-600" viewBox="0 0 24 24" fill="none">
+                                                <svg wire:loading wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="animate-spin size-3 text-red-600" viewBox="0 0 24 24" fill="none">
                                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                                 </svg>
@@ -1241,18 +1240,17 @@
                                                         <span>Edit</span>
                                                     </button>
                                                     <button
-                                                        wire:click="removeListing({{ $item->id }})"
-                                                        wire:confirm="Are you sure you want to remove this harvest listing?"
+                                                        wire:click="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                         wire:loading.attr="disabled"
-                                                        wire:target="removeListing({{ $item->id }})"
+                                                        wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))"
                                                         type="button"
                                                         class="px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-xs font-semibold transition-all cursor-pointer inline-flex items-center gap-1 disabled:opacity-50"
                                                         title="Remove Listing"
                                                     >
-                                                        <svg wire:loading.remove wire:target="removeListing({{ $item->id }})" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <svg wire:loading.remove wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                         </svg>
-                                                        <svg wire:loading wire:target="removeListing({{ $item->id }})" class="animate-spin size-3.5 text-red-600" viewBox="0 0 24 24" fill="none">
+                                                        <svg wire:loading wire:target="confirmRemoveListing({{ $item->id }}, @js($item->title))" class="animate-spin size-3.5 text-red-600" viewBox="0 0 24 24" fill="none">
                                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                                         </svg>
@@ -1898,4 +1896,94 @@
             </div>
         @endif
     @endif
+
+    <!-- ================================================================= -->
+    <!-- MODAL 4: CONFIRM REMOVE HARVEST LISTING (Modal Dialog)            -->
+    <!-- ================================================================= -->
+    <div
+        x-show="showRemoveModal"
+        x-cloak
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 scale-95"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4"
+    >
+        <div class="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-red-200/80 dark:border-red-900/50 p-6 sm:p-7 shadow-2xl space-y-4">
+            <div class="flex items-start justify-between border-b border-red-100 dark:border-slate-800 pb-3.5">
+                <div class="flex items-center gap-3">
+                    <div class="size-11 rounded-2xl bg-red-100 dark:bg-red-950 flex items-center justify-center text-red-600 dark:text-red-400 font-bold text-xl ring-4 ring-red-50 dark:ring-red-900/30">
+                        <svg class="size-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-black text-slate-900 dark:text-white tracking-tight">Remove Harvest Listing</h3>
+                        <p class="text-xs text-slate-500">Archive produce from the public marketplace</p>
+                    </div>
+                </div>
+                <button
+                    @click="showRemoveModal = false"
+                    wire:click="cancelRemoveListing"
+                    type="button"
+                    class="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                    <svg class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Are you sure you want to remove this harvest listing? It will be archived and will no longer be visible to municipal buyers and aggregators.
+                </p>
+
+                @if($listingToRemoveTitle)
+                    <div class="p-3.5 rounded-2xl bg-red-50/70 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 flex items-center gap-3">
+                        <div class="size-8 rounded-xl bg-red-100 dark:bg-red-900/60 flex items-center justify-center text-red-600 dark:text-red-300 shrink-0 font-bold text-sm">
+                            🌾
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <span class="block text-xs font-bold text-slate-900 dark:text-white truncate">
+                                {{ $listingToRemoveTitle }}
+                            </span>
+                            <span class="text-[10px] text-red-600 dark:text-red-400 font-medium">
+                                Action: Archive listing from active registry
+                            </span>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <div class="flex items-center justify-end gap-2.5 pt-3.5 border-t border-slate-200 dark:border-slate-800">
+                <button
+                    @click="showRemoveModal = false"
+                    wire:click="cancelRemoveListing"
+                    type="button"
+                    class="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors cursor-pointer"
+                >
+                    Cancel
+                </button>
+                <button
+                    wire:click="executeRemoveListing"
+                    wire:loading.attr="disabled"
+                    wire:target="executeRemoveListing"
+                    type="button"
+                    class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-red-600/30 cursor-pointer disabled:opacity-50 active:scale-95"
+                >
+                    <span wire:loading.remove wire:target="executeRemoveListing">Yes, Remove Listing</span>
+                    <span wire:loading wire:target="executeRemoveListing" class="inline-flex items-center gap-1.5">
+                        <svg class="animate-spin size-3.5 text-white" viewBox="0 0 24 24" fill="none">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                        Archiving...
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

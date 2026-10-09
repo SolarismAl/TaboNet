@@ -557,4 +557,58 @@ class MunicipalMarketplaceTest extends TestCase
             ->call('gotoPage', 2, 'overviewInquiryPage')
             ->assertSee('Showing 6 to 7 of 7 pre-orders');
     }
+
+    public function test_farmer_can_prompt_remove_modal_and_cancel(): void
+    {
+        $farmer = User::factory()->create(['role' => 'farmer', 'barangay' => 'Linotan']);
+
+        $product = Product::create([
+            'user_id' => $farmer->id,
+            'name' => 'Organic Squash',
+            'category' => 'Vegetables',
+            'quantity' => 150,
+            'unit' => 'kg',
+            'price' => 35.00,
+            'barangay' => 'Linotan',
+            'status' => 'active',
+        ]);
+
+        Livewire::actingAs($farmer)
+            ->test(MunicipalMarketplaceDashboard::class, ['viewMode' => 'overview'])
+            ->call('confirmRemoveListing', $product->id, 'Organic Squash')
+            ->assertSet('showRemoveModal', true)
+            ->assertSet('listingToRemoveId', $product->id)
+            ->assertSet('listingToRemoveTitle', 'Organic Squash')
+            ->call('cancelRemoveListing')
+            ->assertSet('showRemoveModal', false)
+            ->assertSet('listingToRemoveId', null);
+
+        $listing = Listing::find($product->id);
+        $this->assertEquals('active', $listing->status);
+    }
+
+    public function test_farmer_can_remove_listing_via_confirmation_modal(): void
+    {
+        $farmer = User::factory()->create(['role' => 'farmer', 'barangay' => 'Linotan']);
+
+        $product = Product::create([
+            'user_id' => $farmer->id,
+            'name' => 'Organic Ampalaya',
+            'category' => 'Vegetables',
+            'quantity' => 80,
+            'unit' => 'kg',
+            'price' => 60.00,
+            'barangay' => 'Linotan',
+            'status' => 'active',
+        ]);
+
+        Livewire::actingAs($farmer)
+            ->test(MunicipalMarketplaceDashboard::class, ['viewMode' => 'overview'])
+            ->call('confirmRemoveListing', $product->id, 'Organic Ampalaya')
+            ->call('executeRemoveListing')
+            ->assertSet('showRemoveModal', false);
+
+        $listing = Listing::find($product->id);
+        $this->assertEquals('archived', $listing->status);
+    }
 }

@@ -86,6 +86,13 @@ class MunicipalMarketplaceDashboard extends Component
 
     public string $edit_description = '';
 
+    // Remove / Archive Confirmation Modal state
+    public bool $showRemoveModal = false;
+
+    public ?int $listingToRemoveId = null;
+
+    public ?string $listingToRemoveTitle = null;
+
     public function mount(?string $viewMode = null): void
     {
         if ($viewMode) {
@@ -653,6 +660,43 @@ class MunicipalMarketplaceDashboard extends Component
             variant: 'success',
             text: "Harvest listing '{$listing->title}' updated successfully."
         );
+    }
+
+    /**
+     * Prompt Remove Listing Confirmation Modal
+     */
+    public function confirmRemoveListing(int $listingId, string $title = ''): void
+    {
+        $this->listingToRemoveId = $listingId;
+        $this->listingToRemoveTitle = $title;
+        $this->showRemoveModal = true;
+    }
+
+    /**
+     * Cancel Remove Listing Modal
+     */
+    public function cancelRemoveListing(): void
+    {
+        $this->showRemoveModal = false;
+        $this->listingToRemoveId = null;
+        $this->listingToRemoveTitle = null;
+    }
+
+    /**
+     * Execute Remove / Archive Listing from Confirmation Modal
+     */
+    public function executeRemoveListing(): void
+    {
+        if (! $this->listingToRemoveId) {
+            return;
+        }
+
+        $id = $this->listingToRemoveId;
+        $this->showRemoveModal = false;
+        $this->listingToRemoveId = null;
+        $this->listingToRemoveTitle = null;
+
+        $this->archiveProduct($id);
     }
 
     /**
