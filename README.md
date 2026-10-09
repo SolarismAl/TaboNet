@@ -1,25 +1,41 @@
 # TaboNet
 
-> **Municipal Digital Agri-Trading, Spot Market Price Index, and Farmgate Produce Aggregation Platform for Cantilan, Surigao del Sur**
+> **Municipal Agricultural Marketplace & Farmgate Price Monitoring Platform**  
+> *Municipality of Cantilan, Province of Surigao del Sur (Zip: 8317)*  
+> *In Partnership with North Eastern Mindanao State University (NEMSU) Cantilan Campus*
 
 ---
 
 ## Overview
 
-**TaboNet** is a municipal agricultural trading platform designed for the Municipality of Cantilan. It empowers local smallholder farmers by eliminating intermediary price gouging, providing direct market access with **0% transaction commission**, and establishing an official, transparent **Municipal Commodity Spot Market Price Index** based on real-time aggregated farmgate rates.
+**TaboNet** is a modern, community-centered digital agricultural marketplace designed specifically for the Municipality of Cantilan. It empowers local smallholder farmers by eliminating intermediary price markups, providing direct market access with **0% middleman fees**, and establishing an honest, transparent **Municipal Daily Price Board** based on real-time aggregated farmgate prices across all 17 barangays.
 
 ---
 
 ## Key Capabilities
 
 - **Role-Based Access Control (RBAC):**
-  - **Producer Hub (Farmers):** Manage farmgate harvest listings, track inventory, execute inline edit/remove controls, and process incoming buyer pre-orders.
-  - **Buyer Marketplace (Commercial & Institutional Buyers):** Discover fresh harvest arrivals across 17 barangays, inspect DA-RSBSA verification status, place pre-orders, and call producers directly.
-  - **Executive Dashboard (Municipal Administrators):** DA-RSBSA farmer accreditation review, municipal harvest catalog oversight, spot price bulletin audits, and system security logging.
-- **Spot Market Price Index ($P_{avg}$):** Mathematical mean benchmark calculated in real time ($P_{avg} = \frac{\sum P}{N}$) across agricultural commodity classifications (Grains & Cereals, Fruits & Orchard, Root Crops, Vegetables, Aquaculture).
-- **Zero-Commission Lead Dispatch:** Direct trade inquiries and pre-orders with instant status transitions (`pending`, `accepted`, `declined`).
-- **High-Density Data Tables with Livewire Pagination:** Sleek tables with built-in sliding-window pagination across all 9 data views.
-- **Dark Mode Support:** Integrated theme toggle with system preference auto-detection and persistence.
+  - **🌾 Smallholder Producer Hub (Farmers):** Post fresh harvest listings (in kilos, *sako*, or *kaing*), track inventory, and receive direct buyer inquiries with zero commission.
+  - **🛒 Buyer Marketplace (Commercial & Institutional Buyers):** Discover fresh produce arrivals across Cantilan, check DA-RSBSA farmer verification, and dispatch pre-order inquiries directly to farmers.
+  - **🏛️ Municipal Administrator (LGU Cantilan):** Review DA-RSBSA farmer accreditations, supervise public harvest listings, monitor daily commodity price trends, and review system audit logs.
+- **Fair Daily Price Board:** Real-time price tracking and commodity averages across staple groups (*Palay & Corn*, *Fresh Vegetables*, *Fruits & Root Crops*, *Coconut & Farm Goods*).
+- **Direct Trade Lead Dispatch:** Zero-commission pre-orders and direct buyer-farmer communication with live status tracking (`pending`, `accepted`, `declined`).
+- **High-Density Data Tables:** Built-in sliding-window pagination and search filters across all 9 data views.
+- **Auto-Verification on Registration:** Streamlined onboarding allows registered farmers and buyers immediate access to their designated portal without email verification friction.
+- **Dark Mode Support:** Full light/dark mode persistence with system preference detection.
+
+---
+
+## Default Seeded Accounts
+
+For local development, thesis defense, and testing, the system provides pre-configured accounts (Password for all: **`password`**):
+
+| Role | Email | Password | Access / Scope |
+| :--- | :--- | :--- | :--- |
+| **🏛️ Municipal Admin** | `admin@tabonet.ph` | `password` | LGU Cantilan municipal oversight, farmer verification, price controls |
+| **🌾 Accredited Farmer** | `farmer@tabonet.ph` | `password` | Mang Pedro (Linotan Farm) — Harvest listings & incoming buyer inquiries |
+| **🛒 Commercial Buyer** | `buyer@tabonet.ph` | `password` | Maria Santos (Wholesaler) — Produce browsing & pre-order dispatch |
+| **⏳ Pending Farmer** | `farmer.pending@tabonet.ph` | `password` | Juan Dela Cruz (Calagdaan) — Pending DA-RSBSA accreditation workflow |
 
 ---
 
@@ -29,17 +45,17 @@ TaboNet operates on an enterprise **13-table normalized relational schema**:
 
 | Table | Purpose |
 |---|---|
-| `users` | Core authentication, role (`farmer`, `buyer`, `admin`), contact data, verification status |
-| `farmer_profiles` | Extension for farmer data: RSBSA ID URL, farm location (Barangay), farm type, bio |
+| `users` | Core authentication, role (`farmer`, `buyer`, `admin`), barangay, phone number, verification status |
+| `farmer_profiles` | Extension for farmer data: RSBSA registration ID, farm location, farm type, bio |
 | `buyer_profiles` | Extension for buyer data: business name, commercial type, delivery barangay |
-| `categories` | Agricultural groupings (Root Crops, Grains, Vegetables, Fruits, Aquaculture) |
-| `commodities` | Standardized produce registry with default units of measure |
-| `listings` | Produce batches with farmgate rates, volume, status (`active`, `sold_out`, `archived`) |
+| `categories` | Agricultural groupings (Grains & Cereals, Root Crops, Vegetables, Fruits, Aquaculture) |
+| `commodities` | Standardized produce registry with default units of measure (kg, sako, kaing) |
+| `listings` | Produce batches with farmgate rates, stock volume, and status (`active`, `sold_out`, `archived`) |
 | `listing_images` | Multi-image support with primary thumbnail flagging |
-| `inquiries` | Trade leads / pre-orders dispatched between buyers and farmers |
+| `inquiries` | Direct trade leads and pre-orders dispatched between buyers and farmers |
 | `inquiry_messages` | In-app messaging and negotiation audit trail |
-| `notifications` | System alerts for order status transitions and administrative approvals |
-| `price_records` | Spot market benchmark log (prevailing, minimum, maximum rates per commodity) |
+| `notifications` | System alerts for order status changes and administrative accreditations |
+| `price_records` | Spot market benchmark log (prevailing, minimum, and maximum rates per commodity) |
 | `moderation_reviews`| Regulatory and administrative listing audit logs |
 | `audit_logs` | Security, RBAC, and governance activity audit trail |
 
@@ -47,10 +63,11 @@ TaboNet operates on an enterprise **13-table normalized relational schema**:
 
 ## Tech Stack
 
-- **Framework:** Laravel 12 (PHP 8.4)
-- **Frontend / Dynamic UI:** Livewire 3, Alpine.js, Tailwind CSS
-- **Authentication & Security:** Laravel Fortify (Passkeys & Two-Factor Authentication support)
-- **Testing:** PHPUnit (95 automated tests, 100% pass rate)
+- **Backend:** Laravel 12 / PHP 8.4
+- **Frontend / Real-Time UI:** Livewire 3, Alpine.js, Flux UI, Tailwind CSS
+- **Database:** SQLite (local dev/testing) & Cloud MySQL / TiDB Serverless (SSL-encrypted production)
+- **Security:** Laravel Fortify (RBAC, Two-Factor Authentication support)
+- **Quality & Testing:** PHPUnit (95 tests, 100% pass rate), Laravel Pint, PHPStan
 
 ---
 
@@ -58,7 +75,7 @@ TaboNet operates on an enterprise **13-table normalized relational schema**:
 
 ### Prerequisites
 
-- **PHP 8.2+** (with `bcmath`, `curl`, `mbstring`, `pdo_sqlite` or `pdo_mysql`, `xml`)
+- **PHP 8.2+** (with `bcmath`, `curl`, `mbstring`, `openssl`, `pdo_mysql`, `pdo_sqlite`, `xml`)
 - **Composer 2+**
 - **Node.js 18+** & **npm**
 
@@ -86,60 +103,84 @@ TaboNet operates on an enterprise **13-table normalized relational schema**:
    php artisan key:generate
    ```
 
-5. **Run Migrations & Seeders:**
-   ```bash
-   php artisan migrate --seed
-   ```
+5. **Configure Database:**
+   
+   - **Option A: Local SQLite (Quick Start)**
+     ```env
+     DB_CONNECTION=sqlite
+     ```
+     ```bash
+     touch database/database.sqlite
+     php artisan migrate --seed
+     ```
 
-6. **Start Local Development Environment:**
+   - **Option B: Online Cloud Database (TiDB / MySQL with SSL)**
+     ```env
+     DB_CONNECTION=mysql
+     DB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+     DB_PORT=4000
+     DB_DATABASE=tabonet
+     DB_USERNAME=your_username
+     DB_PASSWORD=your_password
+     MYSQL_ATTR_SSL_CA=database/isrgrootx1.pem
+     ```
+     ```bash
+     php artisan migrate --seed
+     ```
+
+6. **Start Local Development Server:**
    ```bash
    composer run dev
    ```
-   *Or run Vite and Laravel separately:*
-   ```bash
-   # Terminal 1
-   php artisan serve
-
-   # Terminal 2
-   npm run dev
-   ```
-
-   Access the application at: `http://localhost:8000`
+   *Runs Laravel, Vite, and queue worker concurrently on `http://127.0.0.1:8001`.*
 
 ---
 
-## Default Seeded Accounts
+## Code Quality & Testing
 
-For testing and local evaluation, default test accounts are seeded:
-
-| Role | Email | Password | Landing View |
-|---|---|---|---|
-| **Municipal Admin** | `admin@cantilan.gov.ph` | `password` | **Executive Dashboard** |
-| **Accredited Farmer** | `farmer@cantilan.gov.ph` | `password` | **Producer Hub** |
-| **Commercial Buyer** | `buyer@cantilan.gov.ph` | `password` | **Buyer Marketplace** |
-
----
-
-## Testing
-
-Execute the automated test suite covering RBAC authorization, registration workflows, listing operations, spot price indexing, and pagination:
+TaboNet includes a comprehensive CI check script executing Pint formatting, PHPStan static analysis, and the automated test suite:
 
 ```bash
+# Run full suite (Pint, PHPStan, PHPUnit)
+composer ci:check
+```
+
+Or run individual tools:
+```bash
+# Run PHPUnit tests (95 tests)
 php artisan test
-```
 
-To run marketplace-specific feature tests:
-```bash
+# Run marketplace feature tests only
 php artisan test --filter=MunicipalMarketplaceTest
+
+# Code style formatting
+composer pint
+
+# Static type analysis
+vendor/bin/phpstan analyse
 ```
 
 ---
 
-## Cantilan Coverage
+## 17 Cantilan Barangays Coverage
 
-TaboNet is tailored for all 17 barangays of Cantilan, Surigao del Sur:
+TaboNet is tailored for all seventeen constituent barangays of the Municipality of Cantilan, Surigao del Sur:
 
-`Bugsukan` • `Buntalid` • `Cabangahan` • `Cabas-an` • `Calagdaan` • `Consuelo` • `General Island` • `Linotan` • `Lobo` • `Magasang` • `Magosilom` • `Pag-Antayan` • `Palasao` • `Parang` • `Poblacion` • `San Pedro` • `Tigabongan`
+| | | |
+|---|---|---|
+| • Bugsukan | • Buntalid | • Cabangahan |
+| • Cabas-an | • Calagdaan | • Consuelo |
+| • General Island | • Linotan | • Lobo |
+| • Magasang | • Magosilom | • Pag-Antayan |
+| • Palasao | • Parang | • Poblacion |
+| • San Pedro | • Tigabongan | *(Zip Code: 8317 SDS)* |
+
+---
+
+## Institutional Partnership
+
+- **Municipality of Cantilan, Surigao del Sur** — Municipal Agriculture Office & Public Market
+- **North Eastern Mindanao State University (NEMSU)** — Cantilan Campus ([www.nemsu.edu.ph](https://www.nemsu.edu.ph))
 
 ---
 
