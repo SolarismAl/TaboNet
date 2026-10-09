@@ -34,8 +34,6 @@
             <x-team-invitation-alert :invitation="$teamInvitation" :action="__('Log in')" />
         @endif
 
-        <x-passkey-verify />
-
         <form method="POST" action="{{ route('login.store') }}" class="flex flex-col gap-4">
             @csrf
 
