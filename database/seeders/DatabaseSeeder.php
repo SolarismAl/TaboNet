@@ -58,14 +58,14 @@ class DatabaseSeeder extends Seeder
         );
 
         if (! $farmer->currentTeam) {
-            $createTeam->handle($farmer, 'Linotan Farm Produce', isPersonal: true);
+            $createTeam->handle($farmer, 'Lininti-an Farm Produce', isPersonal: true);
         }
 
         FarmerProfile::firstOrCreate(
             ['user_id' => $farmer->user_id],
             [
-                'farm_name' => 'Linotan Organic Harvest Farm',
-                'farm_location' => 'Linotan',
+                'farm_name' => 'Lininti-an Organic Harvest Farm',
+                'farm_location' => 'Lininti-an (Poblacion)',
                 'farm_type' => 'Crops & Tubers',
                 'valid_id_url' => '16-68-04-001-000123',
                 'bio' => 'Family-operated agro-ecological farm specializing in indigenous rice varieties and upland root crops.',
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             ['user_id' => $buyer->user_id],
             [
                 'business_name' => 'Santos Commercial Trading',
-                'delivery_address' => 'Poblacion',
+                'delivery_address' => 'Lininti-an (Poblacion)',
                 'buyer_type' => 'Wholesaler',
             ]
         );
@@ -158,7 +158,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Highland Sweet Potato (Kamote)',
                 'category' => 'Root Crops',
                 'unit' => 'kg',
-                'desc' => 'Firm, newly dug tubers with rich nutritional content from upland Linotan.',
+                'desc' => 'Firm, newly dug tubers with rich nutritional content from upland Lininti-an.',
                 'price' => 35.00,
                 'min' => 30.00,
                 'max' => 40.00,
@@ -225,7 +225,7 @@ class DatabaseSeeder extends Seeder
                 'farmer_id' => $farmer->user_id,
                 'commodity_id' => $commodityModels['Highland Sweet Potato (Kamote)']->commodity_id,
                 'title' => 'Highland Sweet Potato (Kamote)',
-                'description' => 'Newly dug tubers from upland Linotan. Firm texture, suitable for boiling and market retail.',
+                'description' => 'Newly dug tubers from upland Lininti-an. Firm texture, suitable for boiling and market retail.',
                 'price_per_unit' => 35.00,
                 'available_quantity' => 120.00,
                 'status' => 'active',

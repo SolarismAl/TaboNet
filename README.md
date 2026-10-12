@@ -33,7 +33,7 @@ For local development, thesis defense, and testing, the system provides pre-conf
 | Role | Email | Password | Access / Scope |
 | :--- | :--- | :--- | :--- |
 | **🏛️ Municipal Admin** | `admin@tabonet.ph` | `password` | LGU Cantilan municipal oversight, farmer verification, price controls |
-| **🌾 Accredited Farmer** | `farmer@tabonet.ph` | `password` | Mang Pedro (Linotan Farm) — Harvest listings & incoming buyer inquiries |
+| **🌾 Accredited Farmer** | `farmer@tabonet.ph` | `password` | Mang Pedro (Lininti-an Farm) — Harvest listings & incoming buyer inquiries |
 | **🛒 Commercial Buyer** | `buyer@tabonet.ph` | `password` | Maria Santos (Wholesaler) — Produce browsing & pre-order dispatch |
 | **⏳ Pending Farmer** | `farmer.pending@tabonet.ph` | `password` | Juan Dela Cruz (Calagdaan) — Pending DA-RSBSA accreditation workflow |
 
@@ -170,10 +170,10 @@ TaboNet is tailored for all seventeen constituent barangays of the Municipality 
 |---|---|---|
 | • Bugsukan | • Buntalid | • Cabangahan |
 | • Cabas-an | • Calagdaan | • Consuelo |
-| • General Island | • Linotan | • Lobo |
-| • Magasang | • Magosilom | • Pag-Antayan |
-| • Palasao | • Parang | • Poblacion |
-| • San Pedro | • Tigabongan | *(Zip Code: 8317 SDS)* |
+| • General Island | • Lininti-an (Poblacion) | • Lobo |
+| • Magasang | • Magosilom (Poblacion) | • Pag-Antayan |
+| • Palasao | • Parang | • San Pedro |
+| • Tapi | • Tigabong | *(Zip Code: 8317 SDS)* |
 
 ---
 

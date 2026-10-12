@@ -41,7 +41,7 @@ class RegistrationTest extends TestCase
             'email' => 'pedro.farmer@example.com',
             'role' => 'farmer',
             'phone_number' => '09171234567',
-            'barangay' => 'Linotan',
+            'barangay' => 'Lininti-an (Poblacion)',
             'rsbsa_number' => '16-68-04-001-000123',
             'password' => 'password',
             'password_confirmation' => 'password',
@@ -51,7 +51,7 @@ class RegistrationTest extends TestCase
 
         $this->assertNotNull($user);
         $this->assertEquals('farmer', $user->role);
-        $this->assertEquals('Linotan', $user->barangay);
+        $this->assertEquals('Lininti-an (Poblacion)', $user->barangay);
         $this->assertEquals('09171234567', $user->phone_number);
         $this->assertEquals('16-68-04-001-000123', $user->rsbsa_number);
         $this->assertEquals('pending_verification', $user->status);

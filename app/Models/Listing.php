@@ -145,6 +145,12 @@ class Listing extends Model
 
     public function getBarangayAttribute(): string
     {
-        return $this->farmer?->farmerProfile?->farm_location ?? 'Linotan';
+        $val = $this->farmer?->farmerProfile?->farm_location;
+
+        if ($val === 'Linotan' || $val === 'Poblacion') {
+            return 'Lininti-an (Poblacion)';
+        }
+
+        return $val ?? 'Lininti-an (Poblacion)';
     }
 }

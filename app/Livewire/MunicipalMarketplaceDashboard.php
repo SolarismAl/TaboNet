@@ -52,7 +52,7 @@ class MunicipalMarketplaceDashboard extends Component
 
     public ?float $new_price = null;
 
-    public string $new_barangay = 'Linotan';
+    public string $new_barangay = 'Lininti-an (Poblacion)';
 
     public ?string $new_harvest_date = null;
 
@@ -250,7 +250,7 @@ class MunicipalMarketplaceDashboard extends Component
                     'p_min' => round($min, 2),
                     'p_max' => round($max, 2),
                     'samples' => $count,
-                    'barangays' => $items->map(fn ($it) => $it->farmer?->farmerProfile?->farm_location ?? 'Linotan')->unique()->values()->all(),
+                    'barangays' => $items->map(fn ($it) => $it->farmer?->farmerProfile?->farm_location ?? 'Lininti-an (Poblacion)')->unique()->values()->all(),
                     'trend' => $trend,
                 ];
             })->values()->all();
@@ -405,7 +405,7 @@ class MunicipalMarketplaceDashboard extends Component
         $this->authorize('create', Listing::class);
 
         $user = Auth::user();
-        $this->new_barangay = $user->barangay ?? 'Linotan';
+        $this->new_barangay = $user->barangay ?? 'Lininti-an (Poblacion)';
         $this->new_harvest_date = now()->format('Y-m-d');
         $this->showAddProductModal = true;
     }

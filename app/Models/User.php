@@ -60,13 +60,13 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         'Calagdaan',
         'Consuelo',
         'General Island',
-        'Linotan',
+        'Lininti-an (Poblacion)',
         'Lobo',
-        'Magosilom',
+        'Magasang',
+        'Magosilom (Poblacion)',
         'Pag-Antayan',
         'Palasao',
         'Parang',
-        'Poblacion',
         'San Pedro',
         'Tapi',
         'Tigabong',
@@ -173,9 +173,15 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 
     public function getBarangayAttribute(): ?string
     {
-        return $this->farmerProfile?->farm_location
+        $val = $this->farmerProfile?->farm_location
             ?? $this->buyerProfile?->delivery_address
             ?? $this->temp_barangay;
+
+        if ($val === 'Linotan' || $val === 'Poblacion') {
+            return 'Lininti-an (Poblacion)';
+        }
+
+        return $val;
     }
 
     public function setBarangayAttribute($value): void

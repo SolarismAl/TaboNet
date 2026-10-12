@@ -50,7 +50,7 @@ class UserFactory extends Factory
             if ($user->role === 'farmer' && ! $user->farmerProfile) {
                 $user->farmerProfile()->create([
                     'farm_name' => ($user->full_name ?: $user->name)."'s Farm",
-                    'farm_location' => $user->temp_barangay ?: 'Linotan',
+                    'farm_location' => $user->temp_barangay ?: 'Lininti-an (Poblacion)',
                     'farm_type' => 'Crops',
                     'valid_id_url' => $user->temp_rsbsa ?: '16-68-04-001-000123',
                     'bio' => 'Cantilan registered smallholder farmer.',
@@ -58,7 +58,7 @@ class UserFactory extends Factory
             } elseif ($user->role === 'buyer' && ! $user->buyerProfile) {
                 $user->buyerProfile()->create([
                     'business_name' => ($user->full_name ?: $user->name).' Trade',
-                    'delivery_address' => $user->temp_barangay ?: 'Poblacion',
+                    'delivery_address' => $user->temp_barangay ?: 'Lininti-an (Poblacion)',
                     'buyer_type' => 'Wholesaler',
                 ]);
             }
